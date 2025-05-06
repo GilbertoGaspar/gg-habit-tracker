@@ -13,3 +13,72 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habits    Habit[]
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  CUSTOM
+}
+
+model Habit {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  frequency   Frequency
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  habitLogs   HabitLog[]
+  reminders   Reminder[]
+  streak      Streak?
+
+  @@index([userId])
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  date      DateTime
+  completed Boolean
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([habitId, date])
+  @@index([habitId])
+}
+
+model Reminder {
+  id        String   @id @default(uuid())
+  habitId   String
+  timeOfDay DateTime
+  dayOfWeek Int? // 0 (Sunday) – 6 (Saturday)
+  createdAt DateTime @default(now())
+
+  habit Habit @relation(fields: [habitId], references: [id])
+
+  @@index([habitId])
+}
+
+model Streak {
+  id            String   @id @default(uuid())
+  habitId       String
+  currentStreak Int      @default(0)
+  longestStreak Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  habit Habit @relation(fields: [habitId], references: [id])
+
+  @@unique([habitId])
+}
