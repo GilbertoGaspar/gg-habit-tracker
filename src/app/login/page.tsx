@@ -1,5 +1,5 @@
 import Footer from "@/components/footer";
-import HeroNavBar from "@/components/heroNavbar";
+import HeroNavBar from "@/components/hero-nav-bar";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Login as LoginComponent } from "@/components/login";
