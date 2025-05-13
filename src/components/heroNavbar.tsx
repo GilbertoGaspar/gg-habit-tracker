@@ -26,16 +26,7 @@ export default function HeroNavBar({
     alt: "logo",
     title: "GG Habit Tracker",
   },
-  auth = {
-    login: {
-      title: "Login",
-      url: "/login",
-    },
-    signup: {
-      title: "Sign Up",
-      url: "/register",
-    },
-  },
+  auth = undefined,
 }: HeroNavbarProps) {
   return (
     <section className="flex justify-center items-center py-4">
@@ -51,14 +42,16 @@ export default function HeroNavBar({
               </span>
             </a>
           </div>
-          <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.title}</a>
-            </Button>
-            <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.title}</a>
-            </Button>
-          </div>
+          {auth && (
+            <div className="flex gap-2">
+              <Button asChild variant="outline" size="sm">
+                <a href={auth.login.url}>{auth.login.title}</a>
+              </Button>
+              <Button asChild size="sm">
+                <a href={auth.signup.url}>{auth.signup.title}</a>
+              </Button>
+            </div>
+          )}
         </nav>
       </div>
     </section>

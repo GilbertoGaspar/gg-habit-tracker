@@ -1,10 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
-import NextAuth from "next-auth";
+import NextAuth, { Account, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions = {
+  pages: {
+    signIn: "/login",
+  },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -15,16 +23,16 @@ export const authOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const user = await prisma.user.findUnique({
           where: {
             email: credentials?.email,
           },
         });
 
-        if (user) {
+        if (user && user?.password && credentials?.password) {
           const isCorrectPassword = await compare(
-            credentials?.password || "",
+            credentials.password,
             user.password
           );
 
@@ -37,6 +45,26 @@ export const authOptions = {
       },
     }),
   ],
+  callbacks: {
+    async signIn({ user, account }: { user: User; account: Account | null }) {
+      if (account?.provider === "google" && user?.email && user?.name) {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user?.email },
+        });
+
+        if (!existingUser) {
+          await prisma.user.create({
+            data: {
+              email: user.email,
+              name: user.name,
+            },
+          });
+        }
+      }
+
+      return true;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

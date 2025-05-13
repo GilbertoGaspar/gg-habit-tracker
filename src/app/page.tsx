@@ -13,7 +13,18 @@ export default async function Home() {
 
   return (
     <>
-      <HeroNavBar />
+      <HeroNavBar
+        auth={{
+          login: {
+            title: "Login",
+            url: "/login",
+          },
+          signup: {
+            title: "Sign Up",
+            url: "/register",
+          },
+        }}
+      />
       <Hero
         heading="Build Better Habits. One Day at a Time."
         description="Stay consistent, track your progress, and achieve your goals with a simple, distraction-free habit tracker."
