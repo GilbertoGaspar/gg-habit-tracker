@@ -7,6 +7,20 @@ interface RegisterUserData {
 }
 
 export const registerUser = async (data: RegisterUserData) => {
-  const response = await axios.post("/api/account/register", data);
-  return response.data;
+  try {
+    const response = await axios.post("/api/account/register", data);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getHabits = async () => {
+  try {
+    const response = await axios.get("/api/habits");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

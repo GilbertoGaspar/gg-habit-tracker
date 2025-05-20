@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcrypt";
-import NextAuth, { Account, User } from "next-auth";
+import NextAuth, { Account, User, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -63,6 +63,17 @@ export const authOptions = {
       }
 
       return true;
+    },
+    async session({ session }: { session: Session }) {
+      const userData = await prisma.user.findUnique({
+        where: { email: session.user.email },
+      });
+
+      if (userData) {
+        session.user.id = userData.id;
+      }
+
+      return session;
     },
   },
 };
