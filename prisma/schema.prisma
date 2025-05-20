@@ -71,12 +71,22 @@ model Reminder {
   id        String   @id @default(uuid())
   habitId   String
   timeOfDay DateTime
-  dayOfWeek Int? // 0 (Sunday) – 6 (Saturday)
   createdAt DateTime @default(now())
 
-  habit Habit @relation(fields: [habitId], references: [id])
+  habit Habit         @relation(fields: [habitId], references: [id])
+  days  ReminderDay[]
 
   @@index([habitId])
+}
+
+model ReminderDay {
+  id         String @id @default(cuid())
+  reminderId String
+  dayOfWeek  Int // 0 (Sunday) to 6 (Saturday)
+
+  reminder Reminder @relation(fields: [reminderId], references: [id])
+
+  @@unique([reminderId, dayOfWeek])
 }
 
 model Streak {
