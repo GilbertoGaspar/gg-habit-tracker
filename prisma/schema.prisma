@@ -30,11 +30,19 @@ enum Frequency {
   CUSTOM
 }
 
+enum Status {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
 model Habit {
   id          String     @id @default(cuid())
   name        String
   description String?
   frequency   Frequency
+  status      Status     @default(ACTIVE)
+  icon        String     @default("goal")
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   userId      String
