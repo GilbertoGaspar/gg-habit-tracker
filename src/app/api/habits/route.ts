@@ -19,6 +19,9 @@ export async function GET(request: NextRequest) {
     : ["ACTIVE", "INACTIVE"];
 
   try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const habits = await prisma.habit.findMany({
       where: {
         userId: session?.user?.id,
@@ -27,7 +30,11 @@ export async function GET(request: NextRequest) {
         },
       },
       include: {
-        habitLogs: true,
+        habitLogs: {
+          where: {
+            date: today,
+          },
+        },
         reminders: {
           include: {
             days: true,

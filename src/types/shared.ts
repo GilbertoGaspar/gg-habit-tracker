@@ -13,6 +13,7 @@ export interface Habit {
   updatedAt: string;
   userId: string;
   reminders: Reminder[];
+  habitLogs: HabitLog[];
 }
 
 export interface Day {
@@ -27,4 +28,11 @@ export interface Reminder {
   timeOfDay: string; // ISO string
   createdAt: string;
   days: Day[];
+}
+
+export interface HabitLog {
+  id: string;
+  date: string;
+  completed: boolean;
+  habitId: string;
 }

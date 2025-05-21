@@ -41,3 +41,12 @@ export const postCreateHabit = async (data: CreateHabitData) => {
     throw error;
   }
 };
+
+export const toggleHabit = async (id: string) => {
+  try {
+    const response = await axios.post(`/api/habits/${id}/toggle`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
