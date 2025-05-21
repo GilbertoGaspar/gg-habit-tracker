@@ -5,6 +5,7 @@ import PanelHeader from "@/components/ui/panel-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetHabits } from "@/hooks/api";
 import { Habit } from "@/types/shared";
+import { Frown } from "lucide-react";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
 import Link from "next/link";
 
@@ -47,6 +48,12 @@ export default function ManageHabits() {
             </Link>
           </div>
         ))}
+      {!isLoading && habitsData?.length === 0 && (
+        <div className="flex items-center p-4 border rounded-md bg-gray-100 gap-1">
+          <Frown />
+          <p>No habits!</p>
+        </div>
+      )}
     </div>
   );
 }
