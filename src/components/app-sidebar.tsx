@@ -19,6 +19,7 @@ import {
   User,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const items = [
@@ -68,10 +69,10 @@ export function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={isActive}>
-                      <a href={item.url}>
+                      <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

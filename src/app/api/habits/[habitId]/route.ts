@@ -75,20 +75,30 @@ export async function PUT(
     );
   }
 
-  try {
-    const updatdHabit = await prisma.habit.update({
-      where: {
-        id: habitId,
-      },
-      data: data,
-    });
-    return new Response(JSON.stringify(updatdHabit), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error("Error updating habit:", error);
-    return new Response("Internal Server Error", { status: 500 });
+  const habit = await prisma.habit.findUnique({
+    where: {
+      id: habitId,
+    },
+  });
+
+  if (habit?.userId === session.user.id) {
+    try {
+      const updateHabit = await prisma.habit.update({
+        where: {
+          id: habitId,
+        },
+        data: data,
+      });
+      return new Response(JSON.stringify(updateHabit), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Error updating habit:", error);
+      return new Response("Internal Server Error", { status: 500 });
+    }
+  } else {
+    return new Response("Unauthorized", { status: 401 });
   }
 }
 
@@ -130,9 +140,4 @@ export async function DELETE(
   } else {
     return new Response("Unauthorized", { status: 401 });
   }
-
-  return new Response("", {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
 }

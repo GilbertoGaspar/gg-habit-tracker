@@ -26,6 +26,14 @@ export async function GET(request: NextRequest) {
           in: statusFilter,
         },
       },
+      include: {
+        habitLogs: true,
+        reminders: {
+          include: {
+            days: true,
+          },
+        },
+      },
     });
     if (!habits) {
       return new Response(JSON.stringify([]), {
@@ -57,6 +65,7 @@ export async function POST(request: Request) {
   let data;
   try {
     const json = await request.json();
+    json.dateTime = new Date(json.dateTime);
     data = habitSchema.parse(json);
   } catch (err) {
     const zodError = err as { issues: string[] };
@@ -71,23 +80,46 @@ export async function POST(request: Request) {
       }
     );
   }
+
   try {
-    const habit = await prisma.habit.create({
-      data: {
-        ...data,
-        userId: session.user.id,
-      },
+    const result = await prisma.$transaction(async (tx) => {
+      const habit = await tx.habit.create({
+        data: {
+          userId: session.user.id!,
+          status: "ACTIVE",
+          name: data.name,
+          description: data.description || "",
+          frequency: data.frequency,
+          icon: data.icon,
+        },
+      });
+
+      const reminder = await tx.reminder.create({
+        data: {
+          habitId: habit.id,
+          timeOfDay: data.dateTime,
+        },
+      });
+
+      await tx.reminderDay.createMany({
+        data: data?.daysOfWeek.map((currentDay) => ({
+          reminderId: reminder.id,
+          dayOfWeek: currentDay,
+        })),
+      });
+
+      await tx.streak.create({
+        data: {
+          habitId: habit.id,
+          currentStreak: 0,
+          longestStreak: 0,
+        },
+      });
+
+      return { habit };
     });
 
-    await prisma.streak.create({
-      data: {
-        habitId: habit.id,
-        currentStreak: 0,
-        longestStreak: 0,
-      },
-    });
-
-    return new Response(JSON.stringify(habit), {
+    return new Response(JSON.stringify(result.habit), {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });

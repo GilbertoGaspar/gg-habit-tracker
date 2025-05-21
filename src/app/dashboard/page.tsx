@@ -1,7 +1,22 @@
-import { getServerSession } from "next-auth";
+import ManageHabits from "./components/manage-habits";
+import { Separator } from "@/components/ui/separator";
+import TodaysHabits from "./components/todays-habits";
+import StreaksAndStats from "./components/streaks-and-stats";
 
 export default async function Dashboard() {
-  const session = await getServerSession();
-  console.log("Session data:", session);
-  return <div>Dashboard</div>;
+  return (
+    <div className="flex flex-1 flex-wrap justify-center w-full p-4 gap-4">
+      <div className="flex flex-col sm:flex-1 items-center py-4 gap-8">
+        <TodaysHabits />
+        <StreaksAndStats />
+      </div>
+      <Separator
+        className="hidden sm:block self-stretch"
+        orientation="vertical"
+      />
+      <div className="flex flex-1 justify-center py-4">
+        <ManageHabits />
+      </div>
+    </div>
+  );
 }

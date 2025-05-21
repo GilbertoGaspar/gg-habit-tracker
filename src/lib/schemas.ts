@@ -15,4 +15,6 @@ export const habitSchema = z.object({
   frequency: z.enum(["DAILY", "WEEKLY", "CUSTOM"]),
   status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
   icon: z.string().optional(),
+  daysOfWeek: z.array(z.number()).min(1),
+  dateTime: z.date(),
 });
