@@ -13,7 +13,7 @@ export default function ManageHabits() {
 
   return (
     <div className="flex flex-col gap-2 max-w-[336px] w-full">
-      <PanelHeader>Manage Habits</PanelHeader>
+      <PanelHeader className="self-center self-">Manage Habits</PanelHeader>
       <HabitFormDialog
         button={
           <Button className="self-end cursor-pointer">Create Habit</Button>
@@ -59,6 +59,13 @@ export default function ManageHabits() {
                   ...extraInitialValueData,
                 }}
               />
+              {isLoading && (
+                <>
+                  {[0, 1, 2].map((num) => (
+                    <Skeleton key={num} className="h-[54px] rounded-md" />
+                  ))}
+                </>
+              )}
             </div>
           );
         })}

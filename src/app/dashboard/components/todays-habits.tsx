@@ -18,6 +18,7 @@ export default function TodaysHabits() {
     mutationFn: toggleHabit,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
+      queryClient.invalidateQueries({ queryKey: ["habits-stats"] });
       toast("Updated habit.");
     },
     onError: () => {
@@ -41,8 +42,6 @@ export default function TodaysHabits() {
 
     return habitsForToday;
   }, [habitsData]);
-
-  console.log(todaysHabits);
 
   return (
     <div className="flex flex-col gap-2 max-w-[336px] w-full">

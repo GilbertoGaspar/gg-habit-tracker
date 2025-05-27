@@ -15,6 +15,16 @@ interface CreateHabitData {
   dateTime: string;
 }
 
+interface UpdateHabitData {
+  id: string;
+  name: string;
+  description: string;
+  frequency: string;
+  icon: string;
+  daysOfWeek: number[];
+  dateTime: string;
+}
+
 export const registerUser = async (data: RegisterUserData) => {
   try {
     const response = await axios.post("/api/account/register", data);
@@ -33,9 +43,27 @@ export const getHabits = async () => {
   }
 };
 
+export const getHabitStats = async () => {
+  try {
+    const response = await axios.get("/api/habits/stats");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const postCreateHabit = async (data: CreateHabitData) => {
   try {
     const response = await axios.post("/api/habits", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const putUpdateHabit = async (data: UpdateHabitData) => {
+  try {
+    const response = await axios.put(`/api/habits/${data?.id}`, data);
     return response.data;
   } catch (error) {
     throw error;

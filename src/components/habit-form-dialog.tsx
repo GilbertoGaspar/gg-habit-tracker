@@ -24,7 +24,7 @@ import {
 } from "./ui/select";
 import HabitFormWeekDaySelector from "./habit-form-week-day-selector";
 import { HabitFormTimePicker } from "./habit-form-time-picker";
-import { postCreateHabit } from "@/lib/api";
+import { postCreateHabit, putUpdateHabit } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -47,7 +47,8 @@ interface HabitFormDialogProps {
     description: string;
     icon: string;
     frequency: string;
-    dateTime: Date;
+    dateTime: string;
+    selectedDays: number[];
   };
 }
 
@@ -78,7 +79,7 @@ export default function HabitFormDialog({
       description: initialValue?.description || "",
       icon: initialValue?.icon || "",
       frequency: (initialValue?.frequency as "DAILY" | "WEEKLY") || "DAILY",
-      dateTime: initialValue?.dateTime || new Date(),
+      dateTime: new Date(initialValue?.dateTime || new Date().toString()),
     },
   });
 
@@ -90,7 +91,23 @@ export default function HabitFormDialog({
     mutationFn: postCreateHabit,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits"] });
+      queryClient.invalidateQueries({ queryKey: ["habits-stats"] });
       toast("Successfully created habit.");
+      setIsOpen(false);
+    },
+    onError: () => {
+      toast("Something went wrong!", {
+        description: "Please try again!",
+      });
+    },
+  });
+
+  const updateHabitMutation = useMutation({
+    mutationFn: putUpdateHabit,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["habits"] });
+      queryClient.invalidateQueries({ queryKey: ["habits-stats"] });
+      toast("Successfully updated habit.");
       setIsOpen(false);
     },
     onError: () => {
@@ -103,6 +120,15 @@ export default function HabitFormDialog({
   const onSubmit = (data: HabitFormData) => {
     if (initialValue) {
       // Update Habit TODO
+      updateHabitMutation.mutate({
+        ...data,
+        id: initialValue?.id,
+        description: data?.description || "",
+        icon: data?.icon || "bookmark-check",
+        daysOfWeek:
+          data?.frequency === "DAILY" ? [0, 1, 2, 3, 4, 5, 6] : selectedDays,
+        dateTime: data?.dateTime?.toISOString(),
+      });
     } else {
       //Create New Habit
       createHabitMutation.mutate({
@@ -123,12 +149,22 @@ export default function HabitFormDialog({
   };
 
   useEffect(() => {
+    if (isOpen && initialValue) {
+      reset({
+        name: initialValue.name || "",
+        description: initialValue.description || "",
+        icon: initialValue.icon || "",
+        frequency: initialValue.frequency as "DAILY" | "WEEKLY",
+        dateTime: new Date(initialValue.dateTime),
+      });
+      setSelectedDays(initialValue.selectedDays || []);
+    }
+
     if (!isOpen) {
-      reset();
       setFrequencySelectOpen(false);
       setSelectedDays([]);
     }
-  }, [isOpen, reset]);
+  }, [isOpen, initialValue, reset]);
 
   const isPending = createHabitMutation.isPending;
 

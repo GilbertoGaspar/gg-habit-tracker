@@ -60,6 +60,7 @@ export async function PUT(
   let data;
   try {
     const json = await req.json();
+    json.dateTime = new Date(json.dateTime);
     data = habitSchema.parse(json);
   } catch (err) {
     const zodError = err as { issues: string[] };
@@ -83,13 +84,54 @@ export async function PUT(
 
   if (habit?.userId === session.user.id) {
     try {
-      const updateHabit = await prisma.habit.update({
-        where: {
-          id: habitId,
-        },
-        data: data,
+      const result = await prisma.$transaction(async (tx) => {
+        const updateHabit = await tx.habit.update({
+          where: {
+            id: habitId,
+          },
+          data: {
+            name: data?.name,
+            status: data?.status,
+            description: data?.description,
+            icon: data?.icon,
+            frequency: data?.frequency,
+          },
+        });
+
+        await tx.reminder.updateMany({
+          where: { habitId: habitId },
+          data: {
+            timeOfDay: data.dateTime,
+          },
+        });
+
+        const reminder = await tx.reminder.findFirst({
+          where: {
+            habitId: habitId,
+          },
+        });
+
+        if (!reminder) {
+          throw new Error("Couldn't find existing reminder.");
+        }
+
+        await tx.reminderDay.deleteMany({
+          where: {
+            reminderId: reminder.id,
+          },
+        });
+
+        await tx.reminderDay.createMany({
+          data: data?.daysOfWeek.map((currentDay) => ({
+            reminderId: reminder.id,
+            dayOfWeek: currentDay,
+          })),
+        });
+
+        return { updateHabit };
       });
-      return new Response(JSON.stringify(updateHabit), {
+
+      return new Response(JSON.stringify(result.updateHabit), {
         status: 200,
         headers: { "Content-Type": "application/json" },
       });
@@ -133,6 +175,7 @@ export async function DELETE(
           id: habitId,
         },
       });
+      return new Response("", { status: 200 });
     } catch (error) {
       console.error("Error deleting habit:", error);
       return new Response("Internal Server Error", { status: 500 });
