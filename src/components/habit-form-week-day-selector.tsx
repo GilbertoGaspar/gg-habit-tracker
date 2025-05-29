@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 
-const daysOfWeek = [
+export const daysOfWeek = [
   {
     text: "S",
     id: 0,

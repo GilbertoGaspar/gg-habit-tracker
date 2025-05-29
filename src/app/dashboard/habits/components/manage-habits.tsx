@@ -1,11 +1,12 @@
 "use client";
+import HabitDeleteDialog from "@/components/habit-delete-dialog";
 import HabitFormDialog from "@/components/habit-form-dialog";
 import { Button } from "@/components/ui/button";
 import PanelHeader from "@/components/ui/panel-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetHabits } from "@/hooks/api";
 import { Habit } from "@/types/shared";
-import { Frown } from "lucide-react";
+import { Frown, Trash2 } from "lucide-react";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
 
 export default function ManageHabits() {
@@ -50,15 +51,31 @@ export default function ManageHabits() {
                 />
                 <span>{habit.name}</span>
               </div>
-              <HabitFormDialog
-                button={<Button className="cursor-pointer">Edit</Button>}
-                title="Edit Habit"
-                description="Edit your habit here. Click save when you're done."
-                initialValue={{
-                  ...habit,
-                  ...extraInitialValueData,
-                }}
-              />
+              <div className="flex items-center gap-2">
+                <HabitFormDialog
+                  button={<Button className="cursor-pointer">Edit</Button>}
+                  title="Edit Habit"
+                  description="Edit your habit here. Click save when you're done."
+                  initialValue={{
+                    ...habit,
+                    ...extraInitialValueData,
+                  }}
+                />
+                <HabitDeleteDialog
+                  button={
+                    <Button
+                      variant="destructive"
+                      className="cursor-pointer"
+                      size="icon"
+                    >
+                      <Trash2 />
+                    </Button>
+                  }
+                  title="Delete Habit"
+                  description="Are you sure you want to delete this habit? This action cannot be undone."
+                  habitId={habit.id}
+                />
+              </div>
               {isLoading && (
                 <>
                   {[0, 1, 2].map((num) => (

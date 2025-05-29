@@ -25,6 +25,10 @@ interface UpdateHabitData {
   dateTime: string;
 }
 
+interface DeleteHabitData {
+  id: string;
+}
+
 export const registerUser = async (data: RegisterUserData) => {
   try {
     const response = await axios.post("/api/account/register", data);
@@ -64,6 +68,15 @@ export const postCreateHabit = async (data: CreateHabitData) => {
 export const putUpdateHabit = async (data: UpdateHabitData) => {
   try {
     const response = await axios.put(`/api/habits/${data?.id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteHabit = async (data: DeleteHabitData) => {
+  try {
+    const response = await axios.delete(`/api/habits/${data?.id}`);
     return response.data;
   } catch (error) {
     throw error;

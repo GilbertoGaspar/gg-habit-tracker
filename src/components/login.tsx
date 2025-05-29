@@ -58,7 +58,6 @@ const Login = ({
     const email = data.email;
     const password = data.password;
 
-    // Place API call here to authenticate user credentials
     signIn("credentials", {
       email,
       password,

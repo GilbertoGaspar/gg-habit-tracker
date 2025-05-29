@@ -119,7 +119,6 @@ export default function HabitFormDialog({
 
   const onSubmit = (data: HabitFormData) => {
     if (initialValue) {
-      // Update Habit TODO
       updateHabitMutation.mutate({
         ...data,
         id: initialValue?.id,
@@ -130,7 +129,6 @@ export default function HabitFormDialog({
         dateTime: data?.dateTime?.toISOString(),
       });
     } else {
-      //Create New Habit
       createHabitMutation.mutate({
         ...data,
         description: data?.description || "",
