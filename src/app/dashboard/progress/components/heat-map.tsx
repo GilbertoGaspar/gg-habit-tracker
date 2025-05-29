@@ -39,12 +39,12 @@ export default function Heatmap({ data }: HeatMapProps) {
   const blanks = new Array(offset).fill(null);
 
   return (
-    <>
+    <div className="flex flex-col gap-2 w-[200px] self-center">
       <div className="grid grid-cols-7 gap-1 ">
         {daysOfWeek.map((d) => (
           <div
             key={d.id}
-            className="text-center text-xs text-slate-500 w-6 h-6 rounded-lg"
+            className="text-center text-xs text-slate-500 w-6 h-6 rounded-sm"
           >
             {d.text}
           </div>
@@ -53,7 +53,7 @@ export default function Heatmap({ data }: HeatMapProps) {
 
       <div className="grid grid-cols-7 gap-1">
         {blanks.map((_, idx) => (
-          <div key={`blank-${idx}`} className="w-6 h-6 rounded-lg" />
+          <div key={`blank-${idx}`} className="w-6 h-6 rounded-sm" />
         ))}
 
         {monthDays.map((day) => {
@@ -62,12 +62,12 @@ export default function Heatmap({ data }: HeatMapProps) {
           return (
             <div
               key={key}
-              className={`w-6 h-6 rounded-lg ${getHeatColor(level)}`}
+              className={`w-6 h-6 rounded-sm ${getHeatColor(level)}`}
               title={format(day, "MMM d")}
             />
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
