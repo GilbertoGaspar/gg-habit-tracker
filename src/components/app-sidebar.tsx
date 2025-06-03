@@ -11,7 +11,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
-  Bell,
   ChartNoAxesCombined,
   Goal,
   Home,
