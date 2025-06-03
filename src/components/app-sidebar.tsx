@@ -16,7 +16,7 @@ import {
   Goal,
   Home,
   LogOut,
-  User,
+  Settings,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -44,9 +44,9 @@ export const items = [
     icon: Bell,
   },
   {
-    title: "Account",
-    url: "/dashboard/account",
-    icon: User,
+    title: "Preferences",
+    url: "/dashboard/preferences",
+    icon: Settings,
   },
 ];
 

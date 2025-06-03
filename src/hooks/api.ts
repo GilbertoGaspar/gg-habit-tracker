@@ -1,5 +1,5 @@
 "use client";
-import { getHabits, getHabitStats } from "@/lib/api";
+import { getCurrentUser, getHabits, getHabitStats } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetHabits = () => {
@@ -15,5 +15,13 @@ export const useGetHabitStats = () => {
     queryKey: ["habits-stats"],
     queryFn: getHabitStats,
     staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+};
+
+export const useGetCurrentUser = () => {
+  return useQuery({
+    queryKey: ["user"],
+    queryFn: getCurrentUser,
+    staleTime: 1000 * 60 * 60, // 60 minutes
   });
 };

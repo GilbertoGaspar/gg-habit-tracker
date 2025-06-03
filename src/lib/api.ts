@@ -29,6 +29,28 @@ interface DeleteHabitData {
   id: string;
 }
 
+interface UpdateCurrentUserData {
+  emailNotifications: boolean;
+}
+
+export const getCurrentUser = async () => {
+  try {
+    const response = await axios.get("/api/users/me");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postUpdateCurrentUser = async (data: UpdateCurrentUserData) => {
+  try {
+    const response = await axios.post("/api/users/me", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const registerUser = async (data: RegisterUserData) => {
   try {
     const response = await axios.post("/api/account/register", data);
