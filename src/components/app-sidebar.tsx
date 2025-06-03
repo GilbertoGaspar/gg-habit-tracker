@@ -39,11 +39,6 @@ export const items = [
     icon: ChartNoAxesCombined,
   },
   {
-    title: "Reminders",
-    url: "/dashboard/reminders",
-    icon: Bell,
-  },
-  {
     title: "Preferences",
     url: "/dashboard/preferences",
     icon: Settings,
