@@ -15,13 +15,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  habits    Habit[]
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  password           String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  emailNotifications Boolean  @default(false)
+  habits             Habit[]
 }
 
 enum Frequency {
