@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GG Habit Tracker
+
+A modern, feature-rich habit tracking application built with Next.js that helps users build and maintain positive habits through consistent tracking and reminders.
+
+## Features
+
+- **Habit Management**
+
+  - Create, edit, and delete habits
+  - Set custom frequencies (daily, weekly)
+  - Add descriptions and icons to habits
+
+- **Progress Tracking**
+
+  - Log daily habit completions
+  - View streak statistics
+  - Track current and longest streaks
+  - Visualize progress with charts (powered by Recharts)
+
+- **Smart Reminders**
+
+  - Set customizable reminders for specific days and times
+  - Email notification support
+  - Flexible reminder scheduling
+
+- **User Management**
+  - Secure authentication with credentials and Google sign-in
+  - Password reset functionality
+  - Email notification preferences
+  - Personal habit dashboard
+
+## Tech Stack
+
+- **Frontend**
+
+  - Next.js 15.3 with App Router
+  - React 19
+  - TailwindCSS for styling
+  - Radix UI components for accessible UI elements
+  - React Query for data fetching
+  - Zustand for state management
+  - React Hook Form for form handling
+  - Zod for validation
+
+- **Backend**
+  - Next.js API routes
+  - Prisma ORM with MySQL database
+  - NextAuth.js for authentication
+  - Brevo for email services
+  - bcrypt for password hashing
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Set up your environment variables:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```env
+   DATABASE_URL="your_mysql_connection_string"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   NEXT_PUBLIC_APP_URL=""
+   NEXTAUTH_URL=""
+   NEXTAUTH_SECRET=""
+   GOOGLE_CLIENT_ID=""
+   GOOGLE_CLIENT_SECRET="
 
-## Learn More
+   BREVO_API_KEY=""
+   BREVO_SENDER_NAME=""
+   BREVO_SENDER_EMAIL=""
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run database migrations:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npx prisma migrate dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. Start the development server:
 
-## Deploy on Vercel
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Database Schema
+
+The application uses a MySQL database with the following main entities:
+
+- Users (authentication and preferences)
+- Habits (core habit tracking)
+- HabitLogs (daily completion records)
+- Streaks (streak tracking)
+- Reminders (notification settings)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[MIT License](LICENSE)
