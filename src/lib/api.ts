@@ -33,6 +33,15 @@ interface UpdateCurrentUserData {
   emailNotifications: boolean;
 }
 
+interface ResetPasswordData {
+  token: string;
+  password: string;
+}
+
+interface ForgotPasswordData {
+  email: string;
+}
+
 export const getCurrentUser = async () => {
   try {
     const response = await axios.get("/api/users/me");
@@ -54,6 +63,24 @@ export const postUpdateCurrentUser = async (data: UpdateCurrentUserData) => {
 export const registerUser = async (data: RegisterUserData) => {
   try {
     const response = await axios.post("/api/account/register", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postResetPassword = async (data: ResetPasswordData) => {
+  try {
+    const response = await axios.post("/api/account/reset-password", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postForgotPassword = async (data: ForgotPasswordData) => {
+  try {
+    const response = await axios.post("/api/account/forgot-password", data);
     return response.data;
   } catch (error) {
     throw error;

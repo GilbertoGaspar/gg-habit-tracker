@@ -1,99 +1,74 @@
 "use client";
-import { FcGoogle } from "react-icons/fc";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
-
-import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ResetPasswordUserSchema } from "@/lib/schemas";
+import { useRouter, useSearchParams } from "next/navigation";
+import { postResetPassword } from "@/lib/api";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
-interface LoginFormInputs {
-  email: string;
+interface ResetPasswordProps {
+  logo?: { url: string; src: string; alt: string };
+}
+
+interface ResetPasswordFormInputs {
   password: string;
 }
 
-interface LoginProps {
-  heading?: string;
-  subheading?: string;
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-  };
-  loginText?: string;
-  googleText?: string;
-  signupText?: string;
-  signupUrl?: string;
-}
-
-const Login = ({
-  heading = "Login",
-  subheading = "",
+export default function ResetPasswordComponent({
   logo = {
     url: "/",
     src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
     alt: "Logo",
   },
-  loginText = "Log in",
-  googleText = "Log in with Google",
-  signupText = "Don't have an account?",
-  signupUrl = "/register",
-}: LoginProps) => {
+}: ResetPasswordProps) {
+  const router = useRouter();
+  const token = useSearchParams().get("token");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasError, setHasError] = useState(false);
+
+  if (!token) {
+    router.replace("/login");
+  }
 
   const {
     register,
     handleSubmit,
     resetField,
     formState: { errors },
-  } = useForm<LoginFormInputs>();
+  } = useForm<ResetPasswordFormInputs>({
+    resolver: zodResolver(ResetPasswordUserSchema),
+  });
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
+  const resetPasswordMutation = useMutation({
+    mutationFn: postResetPassword,
+    onSuccess: () => {
+      setIsSubmitting(false);
+      resetField("password");
+      toast(
+        "Password reset successfully. You can now log in with your new password.",
+        {
+          description: "Please log in with your new password.",
+        }
+      );
+      router.push("/login");
+    },
+    onError: () => {
+      setHasError(true);
+      setIsSubmitting(false);
+      resetField("password");
+    },
+  });
+
+  const onSubmit: SubmitHandler<ResetPasswordFormInputs> = (data) => {
     setIsSubmitting(true);
-    const email = data.email;
     const password = data.password;
-
-    signIn("credentials", {
-      email,
-      password,
-      callbackUrl: "/dashboard",
-      redirect: false,
-    })
-      .then((response) => {
-        if (response?.error) {
-          setHasError(true);
-        } else {
-          redirect("/dashboard");
-        }
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-        resetField("password");
-      });
-  };
-
-  const onGoogleLogin = () => {
-    setIsSubmitting(true);
-    signIn("google", {
-      callbackUrl: "/dashboard",
-      redirect: false,
-    })
-      .then((response) => {
-        if (response?.error) {
-          setHasError(true);
-        } else {
-          redirect("/dashboard");
-        }
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    resetPasswordMutation.mutate({ token: token || "", password });
   };
 
   return (
@@ -105,8 +80,10 @@ const Login = ({
               <a href={logo.url} className="mb-6 flex items-center gap-2">
                 <img src={logo.src} className="max-h-8" alt={logo.alt} />
               </a>
-              <h1 className="mb-2 text-2xl font-bold">{heading}</h1>
-              <p className="text-muted-foreground">{subheading}</p>
+              <h1 className="mb-2 text-2xl font-bold">Reset Password?</h1>
+              <p className="text-muted-foreground">
+                Please provide your new password to reset your password.
+              </p>
               {hasError && (
                 <div
                   className="flex items-center p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -131,15 +108,6 @@ const Login = ({
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid gap-4">
-                <Input
-                  type="email"
-                  id="email"
-                  placeholder="Enter your email"
-                  required
-                  {...register("email", { required: "Email is required" })}
-                  disabled={isSubmitting}
-                />
-                {errors.email && <p>{errors.email.message}</p>}
                 <div>
                   <Input
                     type="password"
@@ -152,14 +120,7 @@ const Login = ({
                   />
                   {errors.password && <p>{errors.password.message}</p>}
                 </div>
-                <div className="flex justify-end">
-                  <Link
-                    href="/forgot-password"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    Forgot password
-                  </Link>
-                </div>
+
                 <Button
                   type="submit"
                   className="mt-2 w-full cursor-pointer"
@@ -168,25 +129,13 @@ const Login = ({
                   {isSubmitting && (
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   )}
-                  {loginText}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full cursor-pointer"
-                  onClick={onGoogleLogin}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting && (
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  )}
-                  <FcGoogle className="mr-2 size-5" />
-                  {googleText}
+                  Reset Password
                 </Button>
               </div>
               <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
-                <p>{signupText}</p>
-                <Link href={signupUrl} className="font-medium text-primary">
-                  Sign up
+                <p>Login instead?</p>
+                <Link href="/login" className="font-medium text-primary">
+                  Click here.
                 </Link>
               </div>
             </form>
@@ -195,6 +144,4 @@ const Login = ({
       </div>
     </section>
   );
-};
-
-export { Login };
+}

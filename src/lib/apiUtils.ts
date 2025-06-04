@@ -61,3 +61,16 @@ export const sendTransactionalEmails = async (
     );
   }
 };
+
+export const sendResetEmail = (email: string, token: string) => {
+  return sendTransactionalEmails({
+    to: [
+      {
+        email,
+        name: "User",
+        content: `<p>Click <a href="${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}">here</a> to reset your password.</p>`,
+        subject: "Password Reset Request",
+      },
+    ],
+  });
+};

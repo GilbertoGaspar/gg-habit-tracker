@@ -9,6 +9,17 @@ export const RegisterUserSchema = z.object({
   name: z.string().trim().min(1),
 });
 
+export const ForgotPasswordUserSchema = z.object({
+  email: z.string().email().trim().min(1),
+});
+
+export const ResetPasswordUserSchema = z.object({
+  password: z
+    .string()
+    .trim()
+    .min(8, "Password must be at least 8 characters long"),
+});
+
 export const habitSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),

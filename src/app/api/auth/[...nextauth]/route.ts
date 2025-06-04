@@ -57,6 +57,7 @@ export const authOptions = {
             data: {
               email: user.email,
               name: user.name,
+              provider: account?.provider,
             },
           });
         }
