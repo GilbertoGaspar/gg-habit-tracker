@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 
 interface ResetPasswordProps {
-  logo?: { url: string; src: string; alt: string };
+  logo?: { url: string; alt: string };
 }
 
 interface ResetPasswordFormInputs {

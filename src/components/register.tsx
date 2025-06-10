@@ -28,7 +28,6 @@ interface RegisterProps {
   subheading?: string;
   logo?: {
     url: string;
-    src: string;
     alt: string;
   };
   registerText?: string;
