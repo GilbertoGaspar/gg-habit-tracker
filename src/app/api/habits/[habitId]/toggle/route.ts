@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 
 export async function POST(
   req: Request,
-  { params }: { params: { habitId: string } }
+  { params }: { params: Promise<{ habitId: string }> }
 ) {
   const session = await getServerSession(authOptions);
   if (!session) {

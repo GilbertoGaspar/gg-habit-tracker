@@ -5,14 +5,14 @@ import { habitSchema } from "@/lib/schemas";
 
 export async function GET(
   req: Request,
-  { params }: { params: { habitId: string } }
+  { params }: { params: Promise<{ habitId: string }> }
 ) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const { habitId } = params;
+  const { habitId } = await params;
 
   if (!habitId) {
     return new Response("Habit ID is required", { status: 400 });
@@ -44,7 +44,7 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { habitId: string } }
+  { params }: { params: Promise<{ habitId: string }> }
 ) {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -146,7 +146,7 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { habitId: string } }
+  { params }: { params: Promise<{ habitId: string }> }
 ) {
   const session = await getServerSession(authOptions);
   const { habitId } = await params;
