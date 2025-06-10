@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
+import { ListCheck, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResetPasswordUserSchema } from "@/lib/schemas";
@@ -23,7 +23,6 @@ interface ResetPasswordFormInputs {
 export default function ResetPasswordComponent({
   logo = {
     url: "/",
-    src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
     alt: "Logo",
   },
 }: ResetPasswordProps) {
@@ -78,7 +77,7 @@ export default function ResetPasswordComponent({
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow">
             <div className="mb-6 flex flex-col items-center">
               <a href={logo.url} className="mb-6 flex items-center gap-2">
-                <img src={logo.src} className="max-h-8" alt={logo.alt} />
+                <ListCheck />
               </a>
               <h1 className="mb-2 text-2xl font-bold">Reset Password?</h1>
               <p className="text-muted-foreground">

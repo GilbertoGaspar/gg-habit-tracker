@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterUserSchema } from "@/lib/schemas";
-import { Loader2 } from "lucide-react";
+import { ListCheck, Loader2 } from "lucide-react";
 
 interface RegisterFormInputs {
   name: string;
@@ -42,7 +42,6 @@ const Register = ({
   subheading = "",
   logo = {
     url: "/",
-    src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
     alt: "Logo",
   },
   registerText = "Register",
@@ -125,7 +124,7 @@ const Register = ({
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow">
             <div className="mb-6 flex flex-col items-center">
               <a href={logo.url} className="mb-6 flex items-center gap-2">
-                <img src={logo.src} className="max-h-8" alt={logo.alt} />
+                <ListCheck />
               </a>
               <h1 className="mb-2 text-2xl font-bold">{heading}</h1>
               <p className="text-muted-foreground">{subheading}</p>

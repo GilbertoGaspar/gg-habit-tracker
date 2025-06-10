@@ -1,6 +1,8 @@
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import HeroImage from "../../public/images/hero.png";
+import Image from "next/image";
 
 interface HeroProps {
   heading: string;
@@ -16,7 +18,6 @@ interface HeroProps {
     };
   };
   image?: {
-    src: string;
     alt: string;
   };
 }
@@ -35,7 +36,6 @@ const Hero = ({
     },
   },
   image = {
-    src: "https://www.shadcnblocks.com/images/block/placeholder-1.svg",
     alt: "Hero Image",
   },
 }: HeroProps) => {
@@ -66,10 +66,10 @@ const Hero = ({
               )}
             </div>
           </div>
-          <img
-            src={image.src}
+          <Image
+            src={HeroImage}
             alt={image.alt}
-            className="max-h-96 w-full rounded-md object-cover"
+            className="max-h-115 w-full rounded-md object-cover"
           />
         </div>
       </div>

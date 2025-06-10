@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
+import { ListCheck, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ForgotPasswordUserSchema } from "@/lib/schemas";
@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 interface ForgotPasswordProps {
-  logo?: { url: string; src: string; alt: string };
+  logo?: { url: string; alt: string };
 }
 
 interface ForgotPasswordFormInputs {
@@ -23,7 +23,6 @@ interface ForgotPasswordFormInputs {
 export default function ForgotPasswordComponent({
   logo = {
     url: "/",
-    src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
     alt: "Logo",
   },
 }: ForgotPasswordProps) {
@@ -68,7 +67,7 @@ export default function ForgotPasswordComponent({
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow">
             <div className="mb-6 flex flex-col items-center">
               <a href={logo.url} className="mb-6 flex items-center gap-2">
-                <img src={logo.src} className="max-h-8" alt={logo.alt} />
+                <ListCheck />
               </a>
               <h1 className="mb-2 text-2xl font-bold">Forgot Password?</h1>
               <p className="text-muted-foreground">

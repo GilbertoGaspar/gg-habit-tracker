@@ -1,9 +1,9 @@
+import { ListCheck } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface HeroNavbarProps {
   logo?: {
     url: string;
-    src: string;
     alt: string;
     title: string;
   };
@@ -22,7 +22,6 @@ interface HeroNavbarProps {
 export default function HeroNavBar({
   logo = {
     url: "/",
-    src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
     alt: "logo",
     title: "GG Habit Tracker",
   },
@@ -36,7 +35,7 @@ export default function HeroNavBar({
           <div className="flex items-center gap-6">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
-              <img src={logo.src} className="max-h-8" alt={logo.alt} />
+              <ListCheck />
               <span className="text-lg font-semibold tracking-tighter">
                 {logo.title}
               </span>
