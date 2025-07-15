@@ -1,6 +1,8 @@
 # GG Habit Tracker
 
-A modern, feature-rich habit tracking application built with Next.js that helps users build and maintain positive habits through consistent tracking and reminders.
+> A modern, feature-rich habit tracking application built with Next.js that helps users build and maintain positive habits through consistent tracking and reminders.
+
+<a  href="https://gg-habit-tracker.vercel.app/">Demo App</a>
 
 ## Features
 
@@ -38,7 +40,6 @@ A modern, feature-rich habit tracking application built with Next.js that helps 
   - TailwindCSS for styling
   - Radix UI components for accessible UI elements
   - React Query for data fetching
-  - Zustand for state management
   - React Hook Form for form handling
   - Zod for validation
 
